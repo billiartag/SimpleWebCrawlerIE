@@ -1,0 +1,15 @@
+175*9 https://www.faunadanflora.com/
+6*5 https://klorofa.com/
+65*20 https://www.mongabay.co.id/category/flora-fauna/
+7*8 https://www.fauna.id/hewan-peliharaan/kucing/
+4*10 https://www.fauna.id/serangga/
+9*10 https://www.fauna.id/ikan/
+10*7 https://hijaukan.com/
+12*13 https://hewanpedia.com/category/edukasi/ilmiah/
+10*? https://www.trubus-online.co.id/
+
+
+
+//https://www.mongabay.co.id/tag/hutan/ --> ambil yang tag hutan aja barangkali nabrak
+www.greeners.co/flora-fauna <- 400
+https://infobinatang.com/blog/page/2/ <-- 2-19 *10 = 180

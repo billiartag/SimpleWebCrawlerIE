@@ -1,0 +1,42 @@
+fauna dan flora:
+judul: h1 class posttitle
+waktu: time class post-date
+isi: article class article-post
+
+klorofa:
+judul: h1 class="title single-title entry-title"
+author: a rel="author", dapetin valuenya a
+waktu: span class="thetime date updated", dapetin i, dapetin span, dapetin valuenya span 
+isi: div class thecontent
+
+mongabay
+judul: <div class="article-headline">, dapetin h1, dapetin valuenya
+author: <div class="single-article-meta">, dapetin a, dapetin valuenya
+tanggal: setelah tag author, atau ambil dari url sadja
+isi: article, ambil isinya
+
+fauna id
+judul:h1 class="entry-title", dapetin valuenya
+author tidak ada
+tanggal tidak ada
+isi: <div class="entry-content" itemprop="text">
+
+hijaukan.com
+title: <h1 class="entry-title" itemprop="headline">Buah Semangka dan Segudang Manfaatnya</h1>
+tanggal: <time class="entry-date published" datetime="2020-02-24T07:00:23+07:00" itemprop="datePublished">Februari 24, 2020</time>
+author: <span class="author-name" itemprop="name">Hestina Sari</span>
+isi: <div class="entry-content" itemprop="text">
+
+hewanpedia
+judul: <h1 class="entry-title">Pengertian Reptil dan Berbagai Faktanya</h1>
+author: -
+tanggal:- 
+isi: <div class="post-content entry-content" style="height: auto !important;">
+
+trubus
+judul:<h1 class="post-title single"><a href="https://www.trubus-online.co.id/selada-air/" rel="bookmark" title="Permanent Link to Selada Air">Selada Air</a></h1>
+tanggal:<span class="meta-date">
+		on 05/03/2020	</span>
+author:<span class="meta-author">
+		by <a href="https://www.trubus-online.co.id/author/basya/" title="Posts by admin trubus" rel="author">admin trubus</a>	</span>
+isi:<div class="entry">, ambil semua yang tag p
