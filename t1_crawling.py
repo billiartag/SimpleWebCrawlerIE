@@ -218,22 +218,28 @@ def writeCrawl(hasil):
    judul= ET.SubElement(xml,"judul")
    author= ET.SubElement(xml,"author")
    isi = ET.SubElement(xml,"isi")
+   url = ET.SubElement(xml,"url")
+   body = ET.SubElement(xml,"body")
    
    tanggal.text = hasil.tanggal
    tanggalFetch.text = hasil.fetchTime
    judul.text = hasil.judul
    author.text = hasil.author
    isi.text = hasil.isi
+   url.text = hasil.url
+   body.text = hasil.body
 
-   ET.ElementTree(xml).write("hasil/"+hasil.filename+".xml", encoding="utf-8",xml_declaration=True)
+   ET.ElementTree(xml).write("baru/"+hasil.filename+".xml", encoding="utf-8",xml_declaration=True)
 
 class hasil:
-   def __init__(self, filename, judul, isi, author, tanggal):
+   def __init__(self, filename, judul, isi, author, tanggal,url,body):
       self.filename=filename
       self.judul = judul
       self.isi = isi
       self.author = author
       self.tanggal = tanggal
+      self.url = url
+      self.body = body
       self.fetchTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
    def buatFile(self):
       writeCrawl(self)
@@ -437,9 +443,12 @@ elif(mode==1):
          Eauthor = driver.find_element_by_xpath("//a[@rel='author']")
          author = Eauthor.text
          print(author)
-         EWaktu = driver.find_element_by_xpath("//span[@class='thetime date updated']")
-         EWaktu = EWaktu.find_element_by_tag_name("span")
-         waktu = EWaktu.text
+         EWaktu = driver.find_element_by_xpath("//script[@type='application/ld+json']")
+         waktut = EWaktu.get_attribute("innerHTML")
+         arrW = waktut.split("datePublished\":")
+         arrW= arrW[1].split('"')
+         waktuString= arrW[1].split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='thecontent']")
          isi = EIsi.text
@@ -452,12 +461,10 @@ elif(mode==1):
          Eauthor = Eauthor.find_element_by_tag_name("a")
          author = Eauthor.text
          print(author)
-         EWaktu = driver.find_element_by_xpath("//div[@class='single-article-meta']")
-         teksWaktu = EWaktu.text
-         arrWaktu = teksWaktu.split(" ")
-         ambilWaktu = arrWaktu[-3:]
-         print(ambilWaktu)
-         waktu = ambilWaktu[0]+" "+ambilWaktu[1]+" "+ambilWaktu[2]
+         EWaktu = driver.find_element_by_xpath("//meta[@property='article:published_time']")
+         waktu = EWaktu.get_attribute("content")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_tag_name("article")
          isi = EIsi.text
@@ -467,7 +474,10 @@ elif(mode==1):
          judul = Ejudul.text
          author = "-"
          print(author)
-         waktu = "-"
+         EWaktu = driver.find_element_by_xpath("//meta[@property='article:published_time']")
+         waktu = EWaktu.get_attribute("content")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='entry-content']")
          isi = EIsi.text
@@ -478,8 +488,10 @@ elif(mode==1):
          Eauthor = driver.find_element_by_xpath("//span[@class='author-name']")
          author = Eauthor.text
          print(author)
-         EWaktu = driver.find_element_by_tag_name("time")
-         waktu = EWaktu.text
+         EWaktu = driver.find_element_by_xpath("//time[@class='entry-date published']")
+         waktu = EWaktu.get_attribute("datetime")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='entry-content']")
          isi = EIsi.text
@@ -489,59 +501,88 @@ elif(mode==1):
          judul = Ejudul.text
          author = "-"
          print(author)
-         waktu = "-"
+         EWaktu = driver.find_element_by_xpath("//meta[@property='article:published_time']")
+         waktu = EWaktu.get_attribute("content")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='post-content entry-content']")
          isi = EIsi.text
          print(isi)
          
       elif (domain == "www.trubus-online.co.id"):
+         time.sleep(2)
          try:
-            time.sleep(3)
             closeBoxTrubus()
+            time.sleep(1)
             Ejudul = driver.find_element_by_xpath("//h1[@class='post-title single']")
             Ejudul = Ejudul.find_element_by_tag_name("a")
             judul = Ejudul.text
             Eauthor = driver.find_element_by_xpath("//span[@class='meta-author']")
             author = Eauthor.text
             print(author)
-            EWaktu = driver.find_element_by_xpath("//span[@class='meta-date']")
-            waktu=EWaktu.text
+            EWaktu = driver.find_element_by_xpath("//script[@type='application/ld+json']")
+            waktut = EWaktu.get_attribute("innerHTML")
+            arrW = waktut.split("datePublished\":")
+            arrW= arrW[1].split('"')
+            waktuString= arrW[1].split("T")      
+            print(waktuString)
+            waktu = waktuString[0]+" "+waktuString[1][:-6]
             print(waktu)
             EIsi = driver.find_element_by_xpath("//div[@class='entry']")
             isi = EIsi.text
-            print(isi)
+            print(isi)  
          except:
-            print("gagal fetch")
-            isi = None
+            try:               
+               Ejudul = driver.find_element_by_xpath("//h1[@class='post-title single']")
+               Ejudul = Ejudul.find_element_by_tag_name("a")
+               judul = Ejudul.text
+               Eauthor = driver.find_element_by_xpath("//span[@class='meta-author']")
+               author = Eauthor.text
+               print(author)
+               EWaktu = driver.find_element_by_xpath("//script[@type='application/ld+json']")
+               waktut = EWaktu.get_attribute("innerHTML")
+               arrW = waktut.split("datePublished\":")
+               arrW= arrW[1].split('"')
+               waktuString= arrW[0].split("T")         
+               waktu = waktuString[0]+" "+waktuString[1][:-6]
+               waktu=EWaktu.text
+               print(waktu)
+               EIsi = driver.find_element_by_xpath("//div[@class='entry']")
+               isi = EIsi.text
+               print(isi)
+            except:
+               print("gagal fetch")
+               isi = None
+            
+            
       elif (domain == "www.greeners.co"):
          Ejudul = driver.find_element_by_xpath("//h1[@class='entry-title']")
          judul = Ejudul.text
          Eauthor = driver.find_element_by_xpath("//div[@class='entry-content']")
          Ep = Eauthor.find_elements_by_tag_name("p")
          parPenulis = Ep[-1]
-         # for i in parPenulis:
-         #    txt = i.text
-         #    print(txt)
          isiAuthor = parPenulis.text
-         arrAuthor = isiAuthor.split(" ")
-         arrAuthor = arrAuthor[1:]
+         arrAuthor = isiAuthor.split("Penulis:")
          author = ""
-         for i in arrAuthor:
-            author+=i+" "
+         if(len(arrAuthor)!=1):
+            author=arrAuthor[1]
          print("auth:"+author)
          EWaktu = driver.find_element_by_xpath("//div[@class='post-time']")
          EWaktu = EWaktu.find_element_by_tag_name("time")
-         arrWaktu = (EWaktu.text).split(" ")
-         waktu = ""
-         for i in arrWaktu[-3:]:
-            waktu+=i+" "
-         print("Waktu:"+waktu)
+         arrWaktu = (EWaktu.text).split(" ")   
+         EWaktu = driver.find_element_by_xpath("//script[@type='application/ld+json']")
+         waktut = EWaktu.get_attribute("innerHTML")
+         arrW = waktut.split("datePublished\":")
+         arrW= arrW[1].split('"')
+         waktuString= arrW[1].split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          arrIsi = Ep[:-1]
          isi=""
          for i in arrIsi:
             isi+= i.text+"\n"
          print(isi)
+         time.sleep(3)
       elif (domain == "infobinatang.com"):
          Ejudul = driver.find_element_by_xpath("//a[@class='post-title']")
          judul = Ejudul.text
@@ -550,29 +591,34 @@ elif(mode==1):
          arrAuthor = tAuthor.split(",")
          author = arrAuthor[0]
          print(author)
-         waktu = arrAuthor[-1]
+         EWaktu = driver.find_element_by_xpath("//meta[@property='article:published_time']")
+         waktu = EWaktu.get_attribute("content")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='post-content post-single-content']")
          isi = EIsi.text
          print(isi)
-      elif(domain=="hijauku.com"):         
-         Ejudul = driver.find_element_by_xpath("//h1[@class='entry-title fusion-post-title']")
+      elif(domain=="hijauku.com"):  
+         try:
+             Ejudul = driver.find_element_by_xpath("//h1[@class='entry-title fusion-post-title']")
+         except:
+             Ejudul = driver.find_element_by_xpath("//h1[@class='entry-title fusion-post-title fusion-responsive-typography-calculated']")
          judul = Ejudul.text
          author = "-"
          print(author)
-         EWaktu = driver.find_element_by_xpath("//div[@class='fusion-meta-info-wrapper']")
-         teksWaktu = EWaktu.text
-         arrWaktu = teksWaktu.split(" ")
-         arrW = arrWaktu[:2]
-         waktu = ""
-         for i in arrW:
-            waktu+=i+" "
+         EWaktu = driver.find_element_by_xpath("//span[@class='updated rich-snippet-hidden']")
+         waktu = EWaktu.get_attribute("innerHTML")
+         waktuString= waktu.split("T")         
+         waktu = waktuString[0]+" "+waktuString[1][:-6]
          print(waktu)
          EIsi = driver.find_element_by_xpath("//div[@class='post-content']")
          isi = EIsi.text
          print(isi)
       if(isi is not None):
-         temp = hasil(filename, judul, isi,author,waktu)
+         url_sek = driver.current_url
+         body = driver.find_element_by_tag_name("html").get_attribute('innerHTML')
+         temp = hasil(filename, judul, isi,author,waktu,url_sek,body)
          temp.buatFile()
          temp.print()
       # break

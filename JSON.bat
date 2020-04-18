@@ -1,0 +1,2 @@
+python xmltoJSON.py %*
+pause
