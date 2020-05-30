@@ -607,7 +607,11 @@ elif(mode==1):
          judul = Ejudul.text
          author = "-"
          print(author)
-         EWaktu = driver.find_element_by_xpath("//span[@class='updated rich-snippet-hidden']")
+         time.sleep(1)
+         try:            
+            EWaktu = driver.find_element_by_xpath("//span[@class='updated rich-snippet-hidden']")
+         except :            
+            EWaktu = driver.find_element_by_xpath("//span[@class='updated rich-snippet-hidden']")
          waktu = EWaktu.get_attribute("innerHTML")
          waktuString= waktu.split("T")         
          waktu = waktuString[0]+" "+waktuString[1][:-6]

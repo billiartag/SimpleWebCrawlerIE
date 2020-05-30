@@ -46,7 +46,6 @@ for filename in os.listdir(os.getcwd()+"\\baru\\"):
                elif(bulan=="December"): bln="12"
                tanggal = tahun+"-"+bln+"-"+tanggal+" "+"10:00:00"
                procFile['published_at']=tanggal
-               print(tanggal)
             procFile['published_at']=x.text
          if(x.tag=="tanggalFetch"):
             tanggal = x.text
@@ -66,23 +65,23 @@ for filename in os.listdir(os.getcwd()+"\\baru\\"):
             body.replace("&quot;","\"")
             body.replace("&amp;","&")
             rawFile['html']=body      
-      procFile['topic']="Flora dan Fauna"
+      hasil={}
+      hasil['title']=procFile['title']
+      hasil['content']=procFile['content']
+      hasil['published_at']=procFile['published_at']
+      hasil['fetched_at']=procFile['fetched_at']
+      hasil['url']=procFile['url']
+      hasil['topic']="Flora dan Fauna"
       semuaRaw.append(rawFile)
-      semuaProc.append(procFile)
+      semuaProc.append(hasil)
       ctr+=1
-   if(ctr==3):
-      break
 
-print(semuaProc)
-print(semuaRaw)
+def writeToFile(raw, proc):
+   teks = open("processed.json","w")
+   json.dump(proc,teks)
+   teks.close()
+   teks = open("raw.json","w")
+   json.dump(raw,teks)
+   teks.close()
 
-def prosesTanggal(tanggal):
-   if(tanggal==None):
-      pass
-
-   elif(tanggal[:2]=="on"):
-      pass
-
-   elif(len(tanggal.split(" ")>1)):
-      pass
-   
+writeToFile(semuaRaw, semuaProc)
